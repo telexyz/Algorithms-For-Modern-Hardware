@@ -245,6 +245,6 @@ Cuốn sách chủ yếu dựa trên các bài đăng trên blog, tài liệu ng
 
 ### Miễn trừ trách nhiệm: Lựa chọn công nghệ 
 
-Các ví dụ trong cuốn sách này sử dụng C ++, GCC, x86-64, CUDA và Spark.
+Các ví dụ trong cuốn sách này sử dụng C++, GCC, x86-64, CUDA và Spark.
 
-Tôi không hài lòng với bất kỳ lựa chọn nào trong số này: những công nghệ này là phổ biến và ổn định nhất; do đó hữu ích hơn cho người đọc. Tôi có thể chọn C / Zig / Rust / [Carbon?] (https://github.com/carbon-language/carbon-lang), LLVM, ARM, OpenCL và Dask trong lần tái bản tới.
+Những công nghệ này được chọn vì chúng phổ biến và ổn định nhất; do đó hữu ích hơn cho người đọc. Tôi có thể chọn C / Zig / Rust / Carbon, LLVM, ARM, OpenCL và Dask trong lần tái bản tới.
