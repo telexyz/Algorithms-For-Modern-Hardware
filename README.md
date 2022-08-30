@@ -1,3 +1,13 @@
+Build và mở sách bản tiếng Việt
+
+`
+brew install hugo
+hugo server
+open http://localhost:1315/hpc
+`
+
+- - -
+
 # Algorithmica v3
 
 Algorithmica is an open-access web book dedicated to the art and science of computing.

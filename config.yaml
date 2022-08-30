@@ -22,7 +22,7 @@ markup:
     footnote: false  # katex conflict
     renderer:
       unsafe: true
-defaultContentLanguage: en
+defaultContentLanguage: vi
 sectionPagesMenu: main
 languages:
   en:
@@ -39,6 +39,13 @@ languages:
     languageName: Русский
     languageCode: "ru-ru"
     weight: 2
+  vi:
+    title: Thuật toán hiệu năng cao cho phần cứng hiện đại
+    baseURL: https://vi.algorithmica.org
+    contentDir: content/vietnamese
+    languageName: Tiếng Việt
+    languageCode: "vi-vn"
+    weight: 3
 params:
   repo: "https://github.com/algorithmica-org/algorithmica"
   reveal_hugo:
