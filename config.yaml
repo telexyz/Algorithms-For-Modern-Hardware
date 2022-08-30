@@ -40,7 +40,7 @@ languages:
     languageCode: "ru-ru"
     weight: 2
   vi:
-    title: Thuật toán hiệu năng cao cho phần cứng hiện đại
+    title: Thuật toán cho phần cứng hiện đại
     baseURL: https://vi.algorithmica.org
     contentDir: content/vietnamese
     languageName: Tiếng Việt

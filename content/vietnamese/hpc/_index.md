@@ -1,6 +1,6 @@
 ---
-title: Thuật toán hiệu năng cao cho phần cứng hiện đại
-menuTitle: HPC
+title: Thuật toán cho phần cứng hiện đại
+menuTitle: Hiệu năng cao
 weight: 5
 noToc: true
 ---
@@ -38,7 +38,7 @@ Mục lục dự kiến:
  1.4. Khi nào nên tối ưu hoá
 
 2. Kiến trúc máy tính
- 1.1. Các kiến trúc tập chỉ dẫn (instruction set)
+ 1.1. Các kiến trúc tập chỉ lệnh (instruction set)
  1.2. Ngôn ngữ Assembly
  1.3. Vòng lặp và điều kiện
  1.4. Hàm và đệ quy
@@ -47,12 +47,12 @@ Mục lục dự kiến:
  1.7. Các cuộc gọi hệ thống
  1.8. Ảo hoá
 
-3. Song song cấp chỉ dẫn
+3. Song song cấp chỉ lệnh
  3.1. Pipeline Hazards
  3.2. Chi phí phân nhánh
  3.3. Lập trình không phân nhánh
- 3.4. Bảng chỉ dẫn
- 3.5. Lịch trình chỉ dẫn
+ 3.4. Bảng chỉ lệnh
+ 3.5. Lịch trình chỉ lệnh
  3.6. Tính toán thông lượng
  3.7. Giới hạn hiệu suất lý thuyết
 
