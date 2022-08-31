@@ -44,19 +44,19 @@ Vì chi phí sản xuất trên mỗi đơn vị là một hàm của diện tí
 
 [^power]: Chi phí điện để chạy một máy chủ trong 2-3 năm gần bằng chi phí tự làm chip.
 
-Do sự đánh đổi giữa năng lượng và hiệu suất bạn có thể thực hiện trong quá trình thiết kế, độ trung thực của chính quá trình chế tạo, chẳng hạn như "180nm" hoặc "65nm", trực tiếp dịch sang mật độ bóng bán dẫn, đã trở thành thương hiệu cho hiệu quả của CPU[^fidelity].
+Do sự đánh đổi giữa năng lượng và hiệu suất bạn có thể thực hiện trong quá trình thiết kế, độ trung thực của chính quá trình chế tạo, chẳng hạn như "180nm" hoặc "65nm", tương đương với mật độ bóng bán dẫn, đã trở thành thương hiệu cho độ hiệu quả của CPU[^fidelity].
 
 [^fidelity]: khi luật Moore bắt đầu chậm lại, các nhà sản xuất chip ngừng phác hoạ chip của họ bằng kích thước của các thành phần - bây giờ nó được dùng một thuật ngữ tiếp thị. [Một uỷ ban đặc biệt](https://en.wikipedia.org/wiki/International_Technology_Roadmap_for_Semiconductors) họp mặt hai năm một lần, họ lấy tên tiến trình trước đó, chia nó cho căn bậc hai của hai, làm tròn đến số nguyên gần nhất, tuyên bố kết quả là tên của tiến trình mới, và sau đó uống rượu ăn mừng. "nm" không có nghĩa là nanomet nữa.
 
-Trong suốt hầu hết lịch sử máy tính, thu hẹp quang học là động lực chính đằng sau những cải tiến hiệu suất. Gordon Moore, cựu giám đốc điều hành của Intel, vào năm 1975 dự đoán rằng số lượng bóng bán dẫn trong bộ vi xử lý sẽ tăng gấp đôi mỗi hai năm. Dự đoán của ông vẫn đúng cho đến ngày nay và được gọi là *Định luật Moore*.
+Thu hẹp quang học là động lực chính đằng sau những cải tiến hiệu suất trong lịch sử phát triển máy tính. Gordon Moore, cựu giám đốc điều hành của Intel, vào năm 1975 dự đoán rằng số lượng bóng bán dẫn trong bộ vi xử lý sẽ tăng gấp đôi mỗi hai năm. Dự đoán của ông vẫn đúng cho đến ngày nay và được gọi là *luật Moore*.
 
 ![](../img/dennard.ppm)
 
-Dennard Scaling và định luật Moore không phải là luật vật lý, mà là những quan sát được thực hiện bởi các kỹ sư am hiểu. Cả hai đều bị hạn chế vật lý cơ bản, giới hạn cuối cùng là kích thước của các nguyên tử silicon. Trên thực tế, Dennard Scaling đã dừng lại do các vấn đề về năng lượng.
+Dennard Scaling và luật Moore không phải là luật vật lý, mà là những quan sát được thực hiện bởi các kỹ sư am hiểu. Cả hai đều bị hạn chế bởi vật lý cơ bản, giới hạn cuối cùng là kích thước của các nguyên tử silicon. Trên thực tế, Dennard Scaling đã dừng lại do các vấn đề về năng lượng.
 
-Về mặt nhiệt động lực học, máy tính là một thiết bị rất hiệu quả để chuyển đổi năng lượng điện thành nhiệt. Nhiệt này cuối cùng cần phải được loại bỏ, và có những giới hạn vật lý về lượng năng lượng bạn có thể loại bỏ từ một tinh thể kích thước milimet. 
+Về mặt nhiệt động lực học, máy tính là một thiết bị rất hiệu quả để chuyển đổi năng lượng điện thành nhiệt. Nhiệt này cuối cùng cần phải được loại bỏ, và có những giới hạn vật lý về lượng năng lượng bạn có thể loại bỏ từ một tinh thể kích thước milimet. Các kỹ sư máy tính, nhằm tối đa hoá hiệu suất, sẽ chọn tốc độ đồng hồ tối đa có thể được trong khi mức tiêu thụ điện năng tổng thể vẫn giữ nguyên. Nếu bóng bán dẫn trở nên nhỏ hơn, chúng có điện dung ít hơn, có nghĩa là cần ít điện áp hơn để lật chúng, từ đó cho phép tăng tốc độ đồng hồ. 
 
-Các kỹ sư máy tính, nhằm tối đa hoá hiệu suất, sẽ chọn tốc độ đồng hồ tối đa có thể được trong khi mức tiêu thụ điện năng tổng thể vẫn giữ nguyên. Nếu bóng bán dẫn trở nên nhỏ hơn, chúng có điện dung ít hơn, có nghĩa là cần ít điện áp hơn để lật chúng, từ đó cho phép tăng tốc độ đồng hồ. Khoảng năm 2005-2007, chiến lược này đã ngừng hoạt động vì hiệu ứng rò rỉ: các mạch trở nên nhỏ đến mức từ trường của chúng bắt đầu làm cho các electron trong mạch lân cận di chuyển theo hướng chúng không được phép, gây ra sự gia tăng nhiệt không cần thiết và thỉnh thoảng làm xáo trộn bit.
+Khoảng năm 2005-2007, chiến lược này đã ngừng hoạt động vì hiệu ứng rò rỉ: các mạch trở nên nhỏ đến mức từ trường của chúng bắt đầu làm cho các electron trong mạch lân cận di chuyển theo hướng chúng không được phép, gây ra sự gia tăng nhiệt không cần thiết và thỉnh thoảng làm xáo trộn bit.
 
 Cách duy nhất để tránh điều này là tăng điện áp; và để cân bằng mức tiêu thụ điện, bạn cần giảm tần số đồng hồ, từ đó làm cho toàn bộ quá trình dần dần trở nên kém hiệu quả khi mật độ bóng bán dẫn tăng lên. Tại một số điểm, tỷ lệ đồng hồ không còn tăng thêm và xu hướng thu nhỏ bắt đầu chậm lại.
 
@@ -65,12 +65,12 @@ Cách duy nhất để tránh điều này là tăng điện áp; và để cân
 
 Có thể bạn sẽ bất ngờ, nhưng số liệu chính cho CPU hiện đại không phải là tần số đồng hồ, mà là các hoạt động hữu ích trên mỗi joule, hoặc, thực tế hơn, các hoạt động hữu ích trên mỗi đô la.
 
-Trong lịch sử, ba biến thông số chính định hướng việc thiết kế vi mạch là *năng lượng*, *hiệu suất* và *diện tích* (PPA), thường được định nghĩa bằng watt, hertz và nanomet. Cho đến khoảng 2005, chi phí, chủ yếu là một hàm số của diện tích và hiệu suất, là tiêu chí quan trọng nhất, sau đó mới đến năng lượng. Nhưng khi các thiết bị di động chạy bằng pin bắt đầu thay thế PC, công suất tiêu thụ điện nhanh chóng được đưa lên đầu danh sách, tiếp theo mới là chi phí và hiệu suất.
+Trong lịch sử, ba biến thông số chính định hướng việc thiết kế vi mạch là *năng lượng*, *hiệu suất* và *diện tích* (PPA), thường được định nghĩa bằng watt, hertz và nanomet. Cho đến khoảng 2005, chi phí, chủ yếu là một hàm số của diện tích và hiệu suất, là tiêu chí quan trọng nhất, sau đó mới đến năng lượng. Nhưng khi các thiết bị di động chạy bằng pin bắt đầu thay thế máy tính cá nhân, công suất tiêu thụ điện nhanh chóng được đưa lên đầu danh sách, tiếp theo mới là diện tích và hiệu suất.
 
 
-### Modern Computing
+### Máy tính hiện đại
 
-Dennard scaling đã kết thúc, nhưng định luật Moore vẫn tồn tại.
+Dennard scaling đã kết thúc, nhưng luật Moore vẫn tồn tại.
 
 Tốc độ đồng hồ ổn định, nhưng số lượng bóng bán dẫn vẫn đang tăng lên, cho phép tạo ra phần cứng mới, phần cứng *song song*. Thay vì theo đuổi các chu kỳ nhanh hơn, các thiết kế CPU bắt đầu tập trung vào việc thực hiện nhiều thứ hữu ích hơn trong một chu kỳ. Thay vì nhỏ hơn, các bóng bán dẫn đã thay đổi hình dạng.
 
@@ -80,18 +80,18 @@ Tốc độ đồng hồ ổn định, nhưng số lượng bóng bán dẫn v�
 
 Dưới đây là một số cách tiếp cận cốt lõi trong việc sử dụng nhiều bóng bán dẫn:
 
-- Chồng chéo việc thực thi các lệnh để giữ (các phần khác nhau của) CPU luôn bận rộn (đường ống);
+- Chồng chéo việc thực thi nhiều lệnh để giữ (các phần khác nhau của) CPU luôn bận rộn (đường ống);
 - Thực hiện các hoạt động mà không nhất thiết phải chờ các hoạt động trước đó hoàn thành (thực thi đầu cơ và không theo thứ tự);
 - Thêm nhiều đơn vị thực thi để xử lý đồng thời các hoạt động độc lập (bộ xử lý siêu vô hướng);
-- Tăng kích thước từ của máy, đến mức thêm các lệnh có khả năng thực hiện cùng một thao tác trên một khối 128, 256 hoặc 512 bit dữ liệu được chia thành các nhóm ([SIMD](/hpc/simd/));
-- Thêm [nhiều lớp bộ nhớ đệm](/hpc/cpu-cache/) vào chip để tăng tốc độ truy cập [RAM và bộ nhớ ngoài](/hpc/external-memory/) (thời gian truy cập bộ nhớ không tuân theo quy luật mở rộng silicon);
+- Tăng kích thước từ của máy, đến mức thêm các lệnh có khả năng thực hiện cùng một thao tác trên một khối 128, 256 hoặc 512 bit dữ liệu ([SIMD](/hpc/simd/));
+- Thêm [nhiều lớp bộ nhớ đệm](/hpc/cpu-cache/) để tăng tốc độ truy cập [RAM và bộ nhớ ngoài](/hpc/external-memory/) (thời gian truy cập bộ nhớ không tuân theo quy luật mở rộng silicon);
 - Thêm nhiều lõi giống hệt nhau trên chip (tính toán song song, GPU);
 - Sử dụng nhiều chip trong bo mạch chủ và nhiều máy tính rẻ hơn trong trung tâm dữ liệu (tính toán phân tán);
 - Sử dụng phần cứng tuỳ chỉnh để giải quyết một vấn đề cụ thể với hiệu năng tốt hơn (ASIC, FPGA).
 
-Đối với các máy tính hiện đại, phương pháp "[hãy đếm tất cả các hoạt động](../)" để dự đoán hiệu suất thuật toán không chỉ hơi sai mà còn sai theo cấp độ lớn. Điều này đòi hỏi các mô hình tính toán mới và các cách khác để đánh giá hiệu suất thuật toán.
+Đối với các máy tính hiện đại, phương pháp "[hãy đếm tất cả các hoạt động](../)" để dự đoán hiệu suất thuật toán không chỉ hơi sai mà còn sai theo cấp độ lớn. Sự thay đổi của phần cứng hiện đại đòi hỏi các mô hình tính toán mới và các cách khác để đánh giá hiệu suất thuật toán.
 
-### Phụ lục: vài đo lường sức mạnh máy tính
+### Sức mạnh máy tính
 
 - Nhảy con trỏ và xử lý trong hầu hết các ngôn ngữ thông dịch: $10^7$
 - Các hoạt động phân nhánh trong ngôn ngữ biên dịch: $10^8$
