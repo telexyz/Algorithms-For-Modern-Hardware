@@ -1,6 +1,6 @@
 ---
 title: Các mô hình độ phức tạp
-part: Kỹ thuật hiệu suất
+part: Kỹ nghệ hiệu năng
 weight: 1
 ---
 
