@@ -23,15 +23,15 @@ Những chỉ lệnh này được gọi là *mã máy* và được mã hoá nh
 Một ngôn ngữ lập trình về cơ bản chỉ là một giao diện. Bất kỳ chương trình nào được viết trong đó chỉ là một biểu diễn cấp cao hơn đẹp hơn mà tại một số thời điểm cần được chuyển đổi thành mã máy để thực thi trên CPU - và có một số cách khác nhau để làm điều đó:
 
 * Từ quan điểm của lập trình viên, có hai loại ngôn ngữ: *biên dịch*, cần được tiền xử lý trước khi thực thi; và *thông dịch*, được thực hiện trong thời gian chạy bằng một chương trình riêng biệt được gọi là trình thông dịch.
-* Từ góc độ máy tính, cũng có hai loại ngôn ngữ: ngôn ngữ *bản địa*, thực thi trực tiếp mã máy; và *được quản lý*, dựa trên runtime để thực thi.
+* Từ góc độ máy tính, cũng có hai loại ngôn ngữ: ngôn ngữ *bản địa*, thực thi trực tiếp mã máy; và *được quản lý*, dựa trên hệ thống thời gian chạy để thực thi.
 
-Vì chạy mã máy trong trình thông dịch không có ý nghĩa, nên điều này tạo ra tổng cộng ba loại ngôn ngữ lập trình:
+Vì chạy mã máy trong trình thông dịch không có ý nghĩa, nên tổng cộng ba loại ngôn ngữ lập trình:
 
 - Ngôn ngữ được thông dịch, chẳng hạn như Python, JavaScript hoặc Ruby.
-- Các ngôn ngữ được biên dịch với runtime, chẳng hạn như Java, C# hoặc Erlang (và các ngôn ngữ hoạt động trên máy ảo, chẳng hạn như Scala, F# hoặc Elixir).
-- Các ngôn ngữ bản địa được biên dịch, chẳng hạn như C, Go hoặc Rust.
+- Các ngôn ngữ được biên dịch để chạy với hệ thống thời gian chạy (hoặc máy ảo), chẳng hạn như Java, C# hoặc Erlang (và các ngôn ngữ được tạo ra sau để hoạt động trên nền tảng của hệ thống thời gian chạy hoặc máy ảo đó chẳng hạn như Scala, F# hoặc Elixir).
+- Các ngôn ngữ bản địa được biên dịch ra mã máy, chẳng hạn như C, Go hoặc Rust.
 
-Không có cách "đúng" duy nhất để thực thi các chương trình máy tính: mỗi cách tiếp cận có những lợi ích và nhược điểm riêng. Thông dịch qua runtime và máy ảo cung cấp tính linh hoạt và cho phép một số tính năng có vẻ sướng như kiểu động, thay đổi mã thời gian chạy và quản lý bộ nhớ tự động, nhưng chúng đi kèm với một số đánh đổi hiệu suất không thể tránh khỏi, mà chúng ta sẽ nói ở dưới đây.
+Không có cách "đúng" duy nhất để thực thi các chương trình máy tính: mỗi cách tiếp cận có những lợi ích và nhược điểm riêng. Thông dịch qua hệ thống thời gian chạy và máy ảo cung cấp tính linh hoạt và cho phép một số tính năng có vẻ sướng như kiểu động, thay đổi mã thời gian chạy và quản lý bộ nhớ tự động, nhưng chúng đi kèm với một số đánh đổi hiệu suất không thể tránh khỏi, mà chúng ta sẽ nói ở dưới đây.
 
 ### Ngôn ngữ thông dịch
 
@@ -69,7 +69,7 @@ Mã này chạy mất 630 giây, tức là hơn 10 phút! Hãy thử phân tích
 
 CPU chạy với tần số đồng hồ 1.4GHz, nghĩa là nó thực hiện $1.4 \cdot 10^9$ chu kỳ mỗi giây, tổng cộng gần $10^{15}$ cho toàn bộ tính toán, và khoảng 880 chu kỳ cho mỗi phép nhân trong vòng lặp trong cùng.
 
-Điều này không có gì đáng ngạc nhiên nếu bạn xem xét những điều Python cần làm để hiểu lập trình viên muốn làm gì:
+Điều này không có gì đáng ngạc nhiên nếu bạn xem xét những điều Python cần làm để hiểu lập trình viên muốn gì:
 
 - nó phân tích biểu thức `c[i][j] += a[i][k] * b[k][j]`;
 - cố gắng tìm ra `a`, `b`, và `c` là gì và tra cứu tên của chúng trong một bảng băm đặc biệt với thông tin kiểu;
@@ -77,9 +77,9 @@ CPU chạy với tần số đồng hồ 1.4GHz, nghĩa là nó thực hiện $1
 - tìm kiếm kiểu của nó, tìm ra rằng nó là một số thực dấu phẩy động, và tìm nạp phương thức thực hiện toán tử `*`;
 - làm những điều tương tự cho `b` và `c`, và cuối cùng cộng thêm kết quả vào `c[i][j]`.
 
-Trình thông dịch của các ngôn ngữ được sử dụng rộng rãi như Python được tối ưu hoá tốt và họ có thể bỏ qua một số bước trên khi thực hiện lặp lại cùng một đoạn mã. Nhưng vẫn còn một số chi phí khá đáng kể không thể tránh khỏi. Nếu chúng ta loại bỏ tất cả các loại kiểm tra và đuổi theo con trỏ này, có lẽ chúng ta có thể nhận được số chu kỳ trên mỗi phép nhân nhân có tỷ lệ gần với 1.
+Trình thông dịch của các ngôn ngữ được sử dụng rộng rãi như Python được tối ưu hoá tốt và họ có thể bỏ qua một số bước trên khi thực hiện lặp lại cùng một đoạn mã. Nhưng vẫn còn một số chi phí khá đáng kể không thể tránh khỏi. Nếu chúng ta loại bỏ tất cả các loại kiểm tra và đuổi theo con trỏ này, có lẽ chúng ta có thể nhận được số chu kỳ trên mỗi phép nhân nhân có tỷ lệ ngày càng gần với 1.
 
-### Ngôn ngữ được quản lý
+### Ngôn ngữ biên dịch được quản lý
 
 Mã nguồn nhân ma trận như trên được triển khai trong Java:
 
@@ -122,9 +122,9 @@ Java là một *ngôn ngữ biên dịch*, nhưng không phải *ngôn ngữ b�
 
 Biên dịch JIT không phải là một tính năng của chính ngôn ngữ, mà là cách triển khai nó. Có một phiên bản Python được biên dịch JIT có tên [PyPy](https://www.pypy.org/), chỉ cần khoảng 12 giây để thực thi mã ở trên mà không có bất kỳ thay đổi nào.
 
-### Ngôn ngữ biên dịch
+### Ngôn ngữ biên dịch bản địa
 
-Now it's turn for C:
+Giờ tới lượt ngôn ngữ C:
 
 ```cpp
 #include <stdlib.h>
