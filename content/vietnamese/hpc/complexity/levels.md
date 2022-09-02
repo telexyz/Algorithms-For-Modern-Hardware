@@ -4,86 +4,65 @@ weight: 4
 # draft: true
 ---
 
-Tại sao các công ty như Google yêu cầu giải quyết các bài toán thuật toán bảng trắng trong các cuộc phỏng vấn của họ?
-
-Lý do là các tổ chức có hơn 10000 kỹ sư rất khác với thế giới bên ngoài.
+Tại sao các công ty như Google yêu cầu giải quyết các bài toán thuật toán bảng trắng trong các cuộc phỏng vấn của họ? Lý do là các tổ chức có hơn 10000 kỹ sư rất khác với thế giới bên ngoài.
 
 Chắc chắn, khi bạn tiến bộ, những câu hỏi lập trình đơn giản này sẽ được thay thế bằng các vấn đề thiết kế hệ thống phức tạp và đánh giá khả năng quản lý. Lý do các câu hỏi phức tạp hơn chưa được hỏi là bởi vì bạn không nhận được vào cho một vai trò cao cấp ngay khi vừa tốt nghiệp đại học.
 
-This is mostly just my ramblings about career paths in performance engineering.
+- - -
 
-most of the CS knowledge is abstracted away by high level languages and libraries
+Thiết kế thuật toán là kỹ năng bạn dùng tới 20% thời gian lập trình nhưng lại quyết định 80% sự thành công. Và có những lĩnh vực mà hiệu năng là tính năng quyết định sống còn.
 
-I assume that you either want to work in the industry, or in the academia while doing something actually useful.
+> Big-O không phải thứ các công ty phần mềm muốn. Big-O không đảm bảo chương trình viết ra sẽ tối ưu mà nó chỉ đảm bảo sẽ tránh được những thuật toán quá chậm. Những thuật toán không có khả năng mở rộng.
 
-Algorithm design is the kind of skill that you use 20% of time, but it is responsible for 80% of success.
+- - -
 
-There are some areas where performance is a killer features. But look as Java ecosystem: it is hellishly slow, and yet it still powers most of big data ecosystem, and runs most of Android apps. Java and other VM-based languages like WebAssembly are not going away anytime soon.
+Bạn sẽ thật sự thất vọng nếu bạn có kinh nghiệm lập trình cạnh tranh. Bạn sẽ không thể giải quyết những loại vấn đề này, ngay cả khi họ hỏi họ trong một cuộc phỏng vấn. Để giải quyết chúng, bạn cần loại bằng cấp khác. Thuật toán tối ưu tiệm cận đã tồn tại, bạn cần tối ưu hoá yếu tố không đổi. Thật không may, chỉ có một số ít các trường đại học dạy điều đó.
 
-Of course, there is also lot of ~~stupidity~~ bias in hiring. There are big companies that don't ask that at all, and there are companies fully comprised of either former or active competitive programmers. It makes sense, because if people believe some skill is undervalued, why will hire people with that skill, and vice versa.
+## Các cấp độ tối ưu hoá
 
-In any case, the Big-O notation is not what companies really want. It is not about writing optimal problems — it's more about avoiding terribly slow ones. The ones that don't scale. Compute indeed keeps getting cheaper.
+Các lập trình viên có thể được xếp hạng về khả năng tối ưu hoá phần mềm của họ:
 
-You get especially frustrated if you had a competitive programming experience. You won't get to solve these type of problems, even if they asked them on an interview. To solve them, you need other type of qualifications. Asymptotically optimal algorithm already exists, you need to optimize the constant factor. Unfortunately, only a handful of universities teach that.
+0. *Người mới*. Những người không nghĩ về hiệu suất chút nào. Họ thường viết bằng ngôn ngữ cấp cao. Hầu hết các "lập trình viên" dừng lại ở mức này.
 
-## The Levels of Optimization
+1. *Sinh viên đại học*. Những người biết về ký hiệu Big O và quen thuộc với các cấu trúc và phương pháp tiếp cận. Người thực hành LeetCode và CodeForces đang ở mức này. Đây cũng là yêu cầu trong việc tuyển dụng vào các công ty lớn.
 
-Programmers can be put in several "levels" in terms of their software optimization abilities:
+2. *Sinh viên sau đại học*. Những người biết rằng không phải tất cả các lệnh được thực thi bằng nhau; biết các mô hình chi phí khác như mô hình bộ nhớ ngoài (B-tree, sắp xếp bên ngoài), mô hình từ (bitset), hoặc tính toán song song, nhưng vẫn ở mức lý thuyết.
 
-0. *Newbie*. Those who don't think about performance at all. They usually write in high-level languages, sometimes in declarative / functional languages. Most "programmers" stay there (and there is nothing wrong with it).
+3. *Nhà phát triển chuyên nghiệp*. Những người biết thời gian thực tế của các lệnh. Nhận thức được rằng dự đoán rẽ nhánh sai là tốn kém, và bộ nhớ được chia thành các dòng bộ trong nhớ đệm. Biết một số kỹ thuật SIMD cơ bản. 
 
-1. *Undergraduate student*. Those who know about Big O notation and are familiar with basic data structures and approaches. LeetCode and CodeForces folks are there. This is also the requirement in getting into big companies — they have a lot of in-house software, large scale, and they are looking for people in the long term, so asking things like programming language.
+4. *Kỹ sư hiệu suất*. Biết chính xác những gì xảy ra bên trong phần cứng. Biết sự khác biệt giữa độ trễ và băng thông, biết về cổng. Biết cách sử dụng SIMD và phần còn lại của tập lệnh một cách hiệu quả. Có thể đọc mã Assembly và sử dụng profile (để đo lường hiệu suất).
 
-2. *Graduate student*. Those who know that not all operations are created equal; know other cost models such as external memory model (B-tree, external sorting), word model (bitset,) or parallel computing, but still in theory.
+5. *Nhân viên Intel*. Biết chi tiết cụ thể về kiến trúc vi mô. Điều này nằm ngoài phạm vi của các kỹ sư bình thường.
 
-3. *Professional developer*. Those who know actual timings of these operations. Aware that branch mispredictions are costly, memory is split into cache lines. Knows some basic SIMD techniques. 
+Trong đọc cuốn sách này, chúng tôi hy vọng rằng người đọc bắt đầu ở đâu đó quanh cấp độ 1, và hy vọng khi đọc xong nó sẽ đến 4.
 
-4. *Performance engineer*. Know exactly what happens inside their hardware. Know the difference between latency and bandwidth, know about ports. Knows how to use SIMD and the rest of instruction set effectively. Can read assembly and use profilers.
-
-5. *Intel employee*. Knows microarchitecture-specific details. This is outside of the purview of normal engineers.
-
-In this book, we expect that the average reader is somewhere around stage 1, and hopefully by the end of it will get to 4.
-
-You should also go through these levels when designing algorithms. First get it working in the first place, then select a bunch of reasonably asymptotically optimal algorithm. Then think about how they are going to work in terms of their memory operations or ability to execute in parallel (even if you consider single-threaded programs, there is still going to be plenty of parallelism inside a core, so this model is extremely ), and then proceed toward actual implementation. Avoid premature optimization, as Knuth once said.
+Bạn cũng nên trải qua các cấp độ này khi thiết kế thuật toán. Đầu tiên làm cho nó hoạt động đã, sau đó chọn một loạt các thuật toán tối ưu tiệm cận hợp lý. Sau đó suy nghĩ về cách họ sẽ làm việc về hoạt động bộ nhớ của họ hoặc khả năng thực hiện song song (ngay cả khi bạn xem xét các chương trình đơn luồng, thì vẫn sẽ có rất nhiều cơ chế song song tồn tại bên trong một lõi), và sau đó tiến tới cài đặt tối ưu. Nên tránh tối ưu hoá sớm, như Knuth đã từng nói.
 
 ---
 
-For most web services, efficiency doesn't matter, but *latency* does.
+Đối với hầu hết các trang web, hiệu quả không quan trọng, nhưng *độ trễ* thì có. Đồng thời, một máy chủ có lõi chuyên dụng và 1GB ram (là một lượng lớn tài nguyên vô lý cho một dịch vụ web đơn giản) có khấu hao khoảng một phần triệu đô-la mỗi giây. (Tác giả muốn nói là còn nhiều thứ có thể tối ưu cho Web)
 
-Increasing efficiency is not how it is done nowadays.
+Amazon đã làm một thử nghiệm trong đó họ để người dùng trải nghiệm dịch vụ của mình với độ trễ giả tạo và phát hiện ra rằng độ trễ 100ms làm giảm doanh thu. Điều này xảy ra với hầu hết các dịch vụ khác
 
-A pageview usually generates somewhere on the order of 0.1 to 1 cent per pageview. This is a typical rate at which you monetize user attention. Say, if I simply installed AdSense, i'd be getting something like that — depending on where most of my readers are from and how many of them are using an ad blocker.
+Việc giảm thiểu độ trễ thường có thể được thực hiện với tính toán song song, đó là lý do tại sao các hệ thống phân tán được ưa chuộng. Cuốn sách này liên quan đến việc cải thiện *hiệu quả* của các thuật toán, điều này giúp làm giảm độ trễ như là  một sản phẩm phụ của quá trình tối ưu.
 
-At the same time, a server with a dedicated core and 1GB of ram (which is an absurdly large amount of resources for a simple web service) costs around one millionth per second when amortized. You could fetch 100 photos with that.
+Tuy nhiên, vẫn có những trường hợp sử dụng khi có sự đánh đổi giữa chất lượng và giá thành của máy chủ. (Và khi đó với tài nguyên hạn chế, việc tối ưu hóa trở nên quan trọng hơn bao giờ hết.)
 
-Amazon had an experiment where they A/B tested their service with artificial delays and found out that a 100ms delay decreased revenue. This follows for most other services, say, you lose your "flow" at twitter, the user is likely to start thinking on something else and leave. If the delay at Google is more than a few seconds, people will just think that Google isn't working and quit.
+- Tìm kiếm có thứ bậc. Thường có nhiều lớp mô hình chính xác hơn nhưng chậm hơn. Bạn càng xếp hạng nhiều tài liệu trên mỗi lớp, thì chất lượng cuối cùng càng tốt.
 
-Minimization of latency can be usually done with parallel computing, which is why distributed systems are scaled more on scalability. This part of the book is concerned with improving *efficiency* of algorithms, which makes latency lower as the by-product.
+- Trò chơi. Chúng thú vị hơn trên quy mô lớn, nhưng sức mạnh tính toán cũng tăng lên. Điều này bao gồm cả AI.
 
-However, there are still use cases when there is a trade-off between quality and cost of servers.
+- Huấn luyện AI sử dụng dữ liệu lớn như mô hình ngôn ngữ. Các mô hình nặng hơn yêu cầu tính toán nhiều hơn. Điểm nghẽn trong đó không phải là dữ liệu, mà là hiệu quả.
 
-- Search is hierarchical. There are usually many layers of more accurate but slower models. The more documents you rank on each layer, the better the final quality.
-- Games. They are more enjoyable on large scale, but computational power also increases. This includes AI.
-- AI workloads — those that have large quantities of data such as language models. Heavier models require more compute. The bottleneck in them is not the number of data, but efficiencty.
 
-Inherently sequential algorithms, or cases when the resources are constrained. Ctrl+f'ing a large PDF is painful. Factorization.
+## Ước tính tác động
 
-## Estimating the impact
+Đôi khi, việc tối ưu hóa cần phải xảy ra những lựa chọn bậc cao hơn.
 
-Sometime the optimization needs to happen in the calling layer.
+SIMDJSON tăng tốc độ phân tích cú pháp JSON, nhưng có thể tốt hơn nếu không sử dụng JSON ngay từ đầu. Hãy sử dụng Protobuf hoặc các định dạng nhị phân phẳng.
 
-SIMDJSON speeds up JSON parsing, but it may be better to not use JSON in the first place.
+Chi phí để thực hiện, lỗi, khả năng bảo trì. Hoàn toàn ổn khi hầu hết các phần mềm trên thế giới không đạt hiệu năng cao nhất để ưu tiên các chi phí trên.
 
-Protobuf or flat binary formats.
+Trở thành một lập trình viên giỏi hơn có nghĩa là gì? Các chương trình nhanh hơn? Tốc độ làm việc nhanh hơn? Ít lỗi hơn? Nó là sự kết hợp của những cái đó.
 
-There is also a chicken and egg problem: people don't use an approach that much because it is slow and not feasible.
-
-Cost to implement, bugs, maintainability. It is perfectly fine that most software in the world is inefficient.
-
-What does it mean to be a better programmer? Faster programs? Faster speed of work? Fewer bugs? It is a combination of those.
-
-Implementing compiler optimizations or databases are examples of high-leverage activities because they act as a tax on everything else — which is why you see most people writing books on these particular topics rather than software optimization in general.
-
----
-
-Factorization is kind of useless by itself, but it helps with understanding how to optimize number theoretic computations in general. Same goes for sorting and binary trees: most people hold some metainformation.
+Việc tối ưu hóa trình biên dịch hoặc cơ sở dữ liệu là những ví dụ về các hoạt động có tác động cao vì chúng là nền tảng để các phần mềm khác được xây dựng nên.
