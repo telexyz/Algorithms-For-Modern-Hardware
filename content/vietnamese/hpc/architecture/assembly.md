@@ -57,50 +57,39 @@ Ngoài ra còn có các thanh ghi 32-, 16-bit và 8-bit có tên tương tự (`
 
 **Hằng số** chỉ là giá trị số nguyên hoặc dấu phẩy động: `42`,` 0x2a`, `3,14`,` 6,02e23`. Chúng thường được gọi là *giá trị tức thì* vì chúng được nhúng ngay vào mã máy. Bởi vì nó có thể làm tăng đáng kể độ phức tạp của mã hóa lệnh, một số lệnh không hỗ trợ các giá trị tức thì hoặc chỉ cho phép một tập con cố định của chúng. Trong một số trường hợp, bạn phải tải một giá trị không đổi vào một thanh ghi và sau đó sử dụng nó thay vì một giá trị tức thì. Ngoài các giá trị số, còn có các hằng số chuỗi như `hello` hoặc` world\n` với tập con nhỏ các phép toán của riêng chúng.
 
-### Moving Data
+### Di chuyển dữ liệu
 
-Some instructions may have the same mnemonic, but have different operand types, in which case they are considered distinct instructions as they may perform slightly different operations and take different times to execute. The `mov` instruction is a vivid example of that, as it comes in around 20 different forms, all related to moving data: either between the memory and registers or just between two registers. Despite the name, it doesn't *move* a value into a register, but *copies* it, preserving the original.
+Một số lệnh có thể có cùng cách ghi nhớ, nhưng có các kiểu toán hạng khác nhau, trong trường hợp đó, chúng được coi là các lệnh riêng biệt vì chúng có thể thực hiện các thao tác hơi khác nhau và mất thời gian thực hiện khác nhau. Lệnh `mov` là một ví dụ sinh động về điều đó, vì nó có khoảng 20 dạng khác nhau, tất cả đều liên quan đến dữ liệu di chuyển: giữa bộ nhớ và thanh ghi hoặc chỉ giữa hai thanh ghi. Mặc dù tên là di chuyển nhưng nó không *di chuyển* một giá trị vào một thanh ghi, mà *sao chép* nó, giữ nguyên bản gốc.
 
-When used to copy data between two registers, the `mov` instruction instead performs *register renaming* internally — informs the CPU that the value referred by register X is actually stored in register Y — without causing any additional delay except for maybe reading and decoding the instruction itself. For the same reason, the `xchg` instruction that swaps two registers also doesn't cost anything.
+Khi được sử dụng để sao chép dữ liệu giữa hai thanh ghi, lệnh `mov` sẽ thực hiện *đổi tên thanh ghi*  và thông báo cho CPU rằng giá trị được tham chiếu bởi thanh ghi X thực sự được lưu trữ trong thanh ghi Y - mà không gây thêm bất kỳ độ trễ nào ngoại trừ việc có thể đọc và giải mã chỉ lệnh. Vì lý do tương tự, lệnh `xchg` hoán đổi hai thanh ghi cũng không tốn bất kỳ chi phí nào.
 
-As we've seen above with the fused `add`, you don't have to use `mov` for every memory operation: some arithmetic instructions conveniently support memory locations as operands.
+Như chúng ta đã thấy ở trên với `add` hợp nhất, bạn không cần phải sử dụng `mov` cho mọi thao tác trên bộ nhớ: một số lệnh số học hỗ trợ để cho thuận tiện đã  các toán hạng dưới dạng vị trí bộ nhớ.
 
-<!--
+### Chế độ địa chỉ
 
-Some operations are fused like `add r m` or `inc m` (this is one of the rare instructions that doesn't use any register values as operands).
+Việc xác định địa chỉ bộ nhớ được thực hiện với toán tử `[]`, nhưng nó có thể làm được nhiều việc hơn là chỉ diễn giải lại một  vị trí bộ nhớ được lưu trữ trong thanh ghi. Toán hạng địa chỉ có tối đa 4 tham số được trình bày trong cú pháp:
+``
+KÍCH THƯỚC PTR [cơ sở + chỉ số * tỷ lệ + dịch chuyển]
+``
 
-When address is used,
-
-Mirroring
-
--->
-
-### Addressing Modes
-
-Memory addressing is done with the `[]` operator, but it can do more than just reinterpret a value stored in a register as a memory location. The address operand takes up to 4 parameters presented in the syntax:
-
-```
-SIZE PTR [base + index * scale + displacement]
-```
-
-where `displacement` needs to be an integer constant and `scale` can be either 2, 4, or 8. What it does is calculate the pointer `base + index * scale + displacement` and dereferences it.
+trong đó `dịch chuyển` cần là một hằng số nguyên và` tỷ lệ` có thể là 2, 4 hoặc 8. Những gì nó làm là tính toán con trỏ `cơ sở + chỉ số * tỷ lệ + dịch chuyển` và tham chiếu đến nó.
 
 <!-- You can use them in any order: the assembler will figure it out. -->
 
-Using complex addressing is [at most one cycle slower](/hpc/cpu-cache/pointers) than dereferencing a pointer directly, and it can be useful when you have, for example, an array of structures and want to load a specific field of its $i$-th element.
+Sử dụng địa chỉ phức tạp [chậm hơn tối đa một chu kỳ] (/hpc/cpu-cache/pointers) so với tham chiếu trực tiếp con trỏ và nó có thể hữu ích khi bạn có, chẳng hạn như một mảng cấu trúc và muốn tải một trường cụ thể của phần tử $i$-th.
 
-Addressing operator needs to be prefixed with a size specifier for how many bits of data are needed:
+Toán tử định địa chỉ cần được bắt đầu bằng một mã định kích thước cho số lượng bit của dữ liệu:
 
-- `BYTE` for 8 bits
-- `WORD` for 16 bits
-- `DWORD` for 32 bits
-- `QWORD` for 64 bits
+- `BYTE` cho 8 bits
+- `WORD` cho 16 bits
+- `DWORD` cho 32 bits
+- `QWORD` cho 64 bits
 
-There is also a more rare `TBYTE` for [80 bits](/hpc/arithmetic/float), and `XMMWORD`, `YMMWORD`, and `ZMMWORD` for [128, 256, and 512 bits](/hpc/simd) respectively. All these types don't have to be written in uppercase, but this is how most compilers emit them.
+Ngoài ra còn có `TBYTE` cho [80 bit](/hpc/arithmetic/float) và `XMMWORD`, `YMMWORD` và` ZMMWORD` tương ứng với [128, 256 và 512 bit](/hpc/simd).
 
-The address computation is often useful by itself: the `lea` ("load effective address") instruction calculates the memory address of the operand and stores it in a register in one cycle, without doing any actual memory operations. While its intended use is for actually computing memory addresses, it is also often used as an arithmetic trick that would otherwise involve 1 multiplication and 2 additions — for example, you can multiply by 3, 5, and 9 with it.
+Bản thân việc tính toán địa chỉ thường hữu ích: lệnh `lea` ("load effective address") tính toán địa chỉ bộ nhớ của toán hạng và lưu trữ nó trong một thanh ghi được thực hiện trong một chu kỳ mà không cần thực hiện bất kỳ thao tác bộ nhớ nào. Mặc dù mục đích sử dụng của nó là để tính toán các địa chỉ bộ nhớ, nhưng nó cũng thường được sử dụng như một thủ thuật số học liên quan đến 1 phép nhân và 2 phép cộng - ví dụ: bạn có thể nhân với 3, 5 và 9 với nó.
 
-It also frequently serves as a replacement for `add` because it doesn't need a separate `mov` instruction if you need to move the result somewhere else: `add` only works in the two-register `a += b` mode, while `lea` lets you do `a = b + c` (or even `a = b + c + d` if one of them is a constant).
+Nó cũng thường thay thế cho `add` vì nó không cần lệnh `mov` riêng biệt nếu bạn cần di chuyển kết quả đến một nơi khác: `add` chỉ hoạt động trong chế độ hai thanh ghi `a += b` , trong khi `lea` cho phép bạn thực hiện `a = b + c` (hoặc thậm chí `a = b + c + d` nếu một trong số chúng là hằng số).
 
 ### Alternative Syntax
 
