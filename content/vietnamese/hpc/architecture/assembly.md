@@ -4,64 +4,58 @@ weight: 1
 published: true
 ---
 
-CPUs are controlled with *machine language*, which is just a stream of binary-encoded instructions that specify
+CPU được điều khiển bởi ngôn ngữ máy - một luồng mã lệnh nhị phân chỉ định:
+- mã số lệnh (hay còn gọi là *opcode*)
+- *toán hạng* của nó là gì (nếu có)
+- và nơi lưu trữ *kết quả* (nếu được tạo ra).
 
-- the instruction number (called *opcode*),
-- what its *operands* are (if there are any),
-- and where to store the *result* (if one is produced).
 
-A much more human-friendly rendition of machine language, called *assembly language*, uses mnemonic codes to refer to machine code instructions and symbolic names to refer to registers and other storage locations.
+Một phiên bản ngôn ngữ máy thân thiện với con người hơn nhiều, được gọi là *hợp ngữ*, sử dụng các mã ghi nhớ để tham chiếu đến các lệnh mã máy và các tên tượng trưng để tham chiếu đến các thanh ghi và các vị trí lưu trữ khác.
 
-Jumping right into it, here is how you add two numbers (`*c = *a + *b`) in Arm assembly:
-
+Và đây là cách bạn cộng hai số (`*c = *a + *b`) trong hợp ngữ Arm:
 ```nasm
 ; *a = x0, *b = x1, *c = x2
-ldr w0, [x0]    ; load 4 bytes from wherever x0 points into w0
-ldr w1, [x1]    ; load 4 bytes from wherever x1 points into w1
-add w0, w0, w1  ; add w0 with w1 and save the result to w0
-str w0, [x2]    ; write contents of w0 to wherever x2 points
+ldr w0, [x0]    ; nạp 4 bytes từ vị trí x0 trỏ tới vào w0
+ldr w1, [x1]    ; nạp 4 bytes từ vị trí x1 trỏ tới vào w1
+add w0, w0, w1  ; cộng w0 với w1 và lưu kết quả vào w0
+str w0, [x2]    ; ghi nội dung của vào vị trí x2 trỏ tới
 ```
 
-Here is the same operation in x86 assembly:
-
+Dưới đây là đoạn hợp ngữ x86 tương tự:
 ```nasm
 ; *a = rsi, *b = rdi, *c = rdx 
-mov eax, DWORD PTR [rsi]  ; load 4 bytes from wherever rsi points into eax
-add eax, DWORD PTR [rdi]  ; add whatever is stored at rdi to eax
-mov DWORD PTR [rdx], eax  ; write contents of eax to wherever rdx points
+mov eax, DWORD PTR [rsi]  ; nạp 4 bytes từ vị trí rsi trỏ tới vào eax
+add eax, DWORD PTR [rdi]  ; cộng nội dung ở vị trí được rdi trỏ tới vào eax
+mov DWORD PTR [rdx], eax  ; ghi nội dung của eax vào nơi rdx trỏ tới
 ```
 
-Assembly is very simple in the sense that it doesn't have many syntactical constructions compared to high-level programming languages. From what you can observe from the examples above:
+Hợp ngữ rất đơn giản theo nghĩa là nó không có nhiều cấu trúc cú pháp so với các ngôn ngữ lập trình cấp cao. Từ những gì bạn có thể quan sát từ các ví dụ trên:
 
-- A program is a sequence of instructions, each written as its name followed by a variable number of operands.
-- The `[reg]` syntax is used for "dereferencing" a pointer stored in a register, and on x86 you need to prefix it with size information (`DWORD` here means 32 bit).
-- The `;` sign is used for line comments, similar to `#` and `//` in other languages.
+- Chương trình là một dãy các lệnh, mỗi lệnh được viết như tên của nó, theo sau là một số toán hạng.
+- Cú pháp `[thanh-ghi]` được sử dụng để "tham chiếu" một con trỏ được lưu trữ trong một thanh ghi; và với x86, bạn cần thêm thông tin kích thước vào trước (`DWORD` ở đây có nghĩa là 32 bit).
+- Dấu `;` được sử dụng cho các chú thích dòng, tương tự như `#` và `//` trong các ngôn ngữ khác.
 
-Assembly is a very minimal language because it needs to be. It reflects the machine language as closely as possible, up to the point where there is almost 1:1 correspondence between machine code and assembly. In fact, you can turn any compiled program back into its assembly form using a process called *disassembly*[^disassembly] — although everything non-essential like comments will not be preserved.
+Assembly là một ngôn ngữ rất tối thiểu vì nó cần phải như vậy. Nó phản ánh ngôn ngữ máy càng chặt chẽ càng tốt, đến mức gần như có sự tương ứng 1: 1 giữa mã máy và hợp ngữ. Trên thực tế, bạn có thể biến bất kỳ chương trình đã biên dịch nào trở lại dạng hợp ngữ của nó bằng cách sử dụng một quy trình được gọi là *tháo rời* [^disassembly] - mặc dù mọi thứ không cần thiết như nhận xét sẽ không được giữ nguyên.
 
-[^disassembly]: On Linux, to disassemble a compiled program, you can call `objdump -d {path-to-binary}`.
+[^disassembly]: Trên Linux, để tháo rời một chương trình đã biên dịch, bạn có thể gọi `objdump -d {path-to-binary}`.
 
-Note that the two snippets above are not just syntactically different. Both are optimized codes produced by a compiler, but the Arm version uses 4 instructions, while the x86 version uses 3. The `add eax, [rdi]` instruction is what's called *fused instruction* that does a load and an add in one go — this is one of the perks that the [CISC](../isa#risc-vs-cisc) approach can provide.
+Lưu ý rằng hai đoạn mã trên không chỉ khác nhau về mặt cú pháp. Cả hai đều là mã được tối ưu hóa do trình biên dịch tạo ra, nhưng phiên bản Arm sử dụng 4 lệnh, trong khi phiên bản x86 sử dụng 3. Lệnh `add eax, [rdi]` được gọi là *lệnh hợp nhất* thực hiện lệnh tải và lệnh cộng chỉ trong một lần - đây là một trong những đặc thù của [CISC](../isa#risc-vs-cisc).
 
-Since there are far more differences between the architectures than just this one, from here on and for the rest of the book we will only provide examples for x86, which is probably what most of our readers will optimize for, although many of the introduced concepts will be architecture-agnostic.
+### Chỉ lệnh và thanh ghi
 
-### Instructions and Registers
+Vì lý do lịch sử, chỉ lệnh trong hầu hết các ngôn ngữ hợp ngữ đều rất ngắn gọn. Khi mọi người thường viết hợp ngữ bằng tay và viết nhiều lần cùng một tập hợp các hướng dẫn thông dụng, chỉ cần bớt đi  một ký tự phải gõ là đỡ tốn rất nhiều công sức.
 
-For historical reasons, instruction mnemonics in most assembly languages are very terse. Back when people used to write assembly by hand and repeatedly wrote the same set of common instructions, one less character to type was one step away from insanity.
+Ví dụ: `mov` để "lưu/tải một từ", `inc` để "tăng thêm 1", `mul` là "nhân" và `idiv` dành cho "phép chia số nguyên". Bạn có thể tra cứu mô tả của một hướng dẫn theo tên của nó trong [một trong các tài liệu tham khảo x86](https://www.felixcloutier.com/x86/).
 
-For example, `mov` is for "store/load a word," `inc` is for "increment by 1," `mul` is for "multiply," and `idiv` is for "integer division." You can look up the description of an instruction by its name in [one of x86 references](https://www.felixcloutier.com/x86/), but most instructions do what you'd think they do.
+Hầu hết các lệnh đều ghi kết quả của chúng vào toán hạng đầu tiên, toán hạng này cũng có thể tham gia vào việc tính toán như trong ví dụ `add eax, [rdi]` mà chúng ta đã thấy trước đây. Toán hạng có thể là thanh ghi, giá trị không đổi hoặc vị trí bộ nhớ.
 
-Most instructions write their result into the first operand, which can also be involved in the computation like in the `add eax, [rdi]` example we saw before. Operands can be either registers, constant values, or memory locations.
+**Các thanh ghi** được đặt tên là `rax`,` rbx`, `rcx`,` rdx`, `rdi`,` rsi`, `rbp`,` rsp` và `r8`-`r15`, tổng số 16 thanh ghi. Những "chữ cái" được đặt tên như vậy vì lý do lịch sử: `rax` là "bộ tích lũy", `rcx` là "bộ đếm", `rdx` là "dữ liệu", v.v. - nhưng tất nhiên, chúng còn được sử dụng cho nhiều mục đích khác nữa.
 
-**Registers** are named `rax`, `rbx`, `rcx`, `rdx`, `rdi`, `rsi`, `rbp`, `rsp`, and `r8`-`r15` for a total of 16 of them. The "letter" ones are named like that for historical reasons: `rax` is "accumulator," `rcx` is "counter," `rdx` is "data" and so on — but, of course, they don't have to be used only for that.
+Ngoài ra còn có các thanh ghi 32-, 16-bit và 8-bit có tên tương tự (`rax` →` eax` → `ax` →` al`). Chúng không hoàn toàn tách biệt mà là *bí danh*: 32 bit thấp nhất của `rax` là` eax`, 16 bit thấp nhất của `eax` là` ax`, v.v. Điều này được thực hiện để tiết kiệm dung lượng khuôn chip trong khi duy trì khả năng tương thích, và đó cũng là lý do tại sao các casting các kiểu cơ bản trong các ngôn ngữ lập trình biên dịch thường không mất chi phí.
 
-There are also 32-, 16-bit and 8-bit registers that have similar names (`rax` → `eax` → `ax` → `al`). They are not fully separate but *aliased*: the lowest 32 bits of `rax` are `eax`, the lowest 16 bits of `eax` are `ax`, and so on. This is made to save die space while maintaining compatibility, and it is also the reason why basic type casts in compiled programming languages are usually free. 
+Đây chỉ là các thanh ghi *mục đích chung* mà bạn có thể, với [một số ngoại lệ](../functions), sử dụng theo cách bạn muốn trong hầu hết các chỉ lệnh. Ngoài ra còn có một tập hợp các thanh ghi riêng cho [số học dấu phẩy động] (/hpc/arithmetic/float), một loạt các thanh ghi rất rộng được sử dụng trong [SIMD] (/hpc/simd) và một số thanh ghi đặc biệt cần thiết cho [luồng điều khiển] (../loops).
 
-These are just the *general-purpose* registers that you can, with [some exceptions](../functions), use however you like in most instructions. There is also a separate set of registers for [floating-point arithmetic](/hpc/arithmetic/float), a bunch of very wide registers used in [vector extensions](/hpc/simd), and a few special ones that are needed for [control flow](../loops), but we'll get there in time.
-
-**Constants** are just integer or floating-point values: `42`, `0x2a`, `3.14`, `6.02e23`. They are more commonly called *immediate values* because they are embedded right into the machine code. Because it may considerably increase the complexity of the instruction encoding, some instructions don't support immediate values or allow just a fixed subset of them. In some cases, you have to load a constant value into a register and then use it instead of an immediate value.
-
-Apart from numeric values, there are also string constants such as `hello` or `world\n` with their own little subset of operations, but that is a somewhat obscure corner of the assembly language that we are not going to explore here.
+**Hằng số** chỉ là giá trị số nguyên hoặc dấu phẩy động: `42`,` 0x2a`, `3,14`,` 6,02e23`. Chúng thường được gọi là *giá trị tức thì* vì chúng được nhúng ngay vào mã máy. Bởi vì nó có thể làm tăng đáng kể độ phức tạp của mã hóa lệnh, một số lệnh không hỗ trợ các giá trị tức thì hoặc chỉ cho phép một tập con cố định của chúng. Trong một số trường hợp, bạn phải tải một giá trị không đổi vào một thanh ghi và sau đó sử dụng nó thay vì một giá trị tức thì. Ngoài các giá trị số, còn có các hằng số chuỗi như `hello` hoặc` world\n` với tập con nhỏ các phép toán của riêng chúng.
 
 ### Moving Data
 
