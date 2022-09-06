@@ -8,4 +8,4 @@ Khi tôi bắt đầu tự học cách tối ưu hóa chương trình, một sai
 
 Thật không may, đây là cách hầu hết các lập trình viên tiếp cận tối ưu hóa. Hầu hết các tài liệu giảng dạy về hiệu suất không dạy bạn lý luận về hiệu suất phần mềm một cách định tính. Thay vào đó, họ đưa ra lời khuyên chung cho bạn về các phương pháp triển khai nhất định - và trực giác về hiệu suất nói chung rõ ràng là không đủ.
 
-Nó có lẽ đã giúp tôi tiết kiệm hàng chục, nếu không phải hàng trăm giờ nếu tôi học kiến trúc máy tính *trước khi* lập trình thuật toán. Vì vậy, ngay cả khi hầu hết mọi người không *hào hứng* với nó, chúng ta sẽ dành vài chương đầu tiên để nghiên cứu cách hoạt động của CPU và bắt đầu với việc học Assembly.
+Nó có lẽ đã giúp tôi tiết kiệm hàng chục, nếu không phải hàng trăm giờ nếu tôi học kiến trúc máy tính *trước khi* lập trình thuật toán. Vì vậy, ngay cả khi hầu hết mọi người không *hào hứng* với nó, chúng ta sẽ dành vài chương đầu tiên để nghiên cứu cách hoạt động của CPU và bắt đầu với việc học hợp ngữ.

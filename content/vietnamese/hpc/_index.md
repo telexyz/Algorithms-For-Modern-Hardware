@@ -39,7 +39,7 @@ Mục lục dự kiến:
 
 2. Kiến trúc máy tính
  1.1. Các kiến trúc tập chỉ lệnh (instruction set)
- 1.2. Ngôn ngữ Assembly
+ 1.2. Hợp ngữ (Assembly)
  1.3. Vòng lặp và điều kiện
  1.4. Hàm và đệ quy
  1.5. Phân nhánh gián tiếp

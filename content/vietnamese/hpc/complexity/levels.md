@@ -30,7 +30,7 @@ Các lập trình viên có thể được xếp hạng về khả năng tối �
 
 3. *Nhà phát triển chuyên nghiệp*. Những người biết thời gian thực tế của các lệnh. Nhận thức được rằng dự đoán rẽ nhánh sai là tốn kém, và bộ nhớ được chia thành các dòng bộ trong nhớ đệm. Biết một số kỹ thuật SIMD cơ bản. 
 
-4. *Kỹ sư hiệu suất*. Biết chính xác những gì xảy ra bên trong phần cứng. Biết sự khác biệt giữa độ trễ và băng thông, biết về cổng. Biết cách sử dụng SIMD và phần còn lại của tập lệnh một cách hiệu quả. Có thể đọc mã Assembly và sử dụng profile (để đo lường hiệu suất).
+4. *Kỹ sư hiệu suất*. Biết chính xác những gì xảy ra bên trong phần cứng. Biết sự khác biệt giữa độ trễ và băng thông, biết về cổng. Biết cách sử dụng SIMD và phần còn lại của tập lệnh một cách hiệu quả. Có thể đọc mã hợp ngữ và sử dụng profile (để đo lường hiệu suất).
 
 5. *Nhân viên Intel*. Biết chi tiết cụ thể về kiến trúc vi mô. Điều này nằm ngoài phạm vi của các kỹ sư bình thường.
 
