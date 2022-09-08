@@ -40,26 +40,27 @@ Bởi vậy các trình biên dịch thường thực hiện tối ưu hóa mà 
 
 Trong GCC, bạn có thể sử dụng cờ `-falign-label=n` để chỉ định một chính sách căn chỉnh cụ thể, [thay thế](https://gcc.gnu.org/onlineocs/gcc/Optimize-Options.html) `-labels` với `-function`, `-loops` hoặc `-jumps` nếu bạn muốn chọn lọc hơn. Ở mức độ tối ưu hóa `-O2` và `-O3`, nó được bật mặc định - mà không cần căn chỉnh cụ thể, trong trường hợp đó, nó sử dụng giá trị mặc định phụ thuộc vào từng máy (thường là hợp lý).
 
-### Instruction Cache
+### Bộ đệm chỉ lệnh
 
-The instructions are stored and fetched using largely the same [memory system](/hpc/cpu-cache) as for the data, except maybe the lower layers of cache are replaced with a separate *instruction cache* (because you wouldn't want a random data read to kick out the code that processes it).
+Các chỉ lệnh được lưu và nạp sử dụng [bộ nhớ hệ thống](/hpc/cpu-cache) giống với dữ liệu, ngoại trừ tầng thấp nhất của bộ đệm được thay thế bởi bộ đệm chỉ lệnh riêng - bởi vì bạn sẽ không muốn dữ liệu được đọc sẽ ghi đè lên chỉ lệnh).
 
-The instruction cache is crucial in situations when you either:
+Bộ đệm chỉ lệnh là thiết yếu trong những trường hợp sau:
+- không biết chỉ lệnh nào sẽ được thực hiện tiếp và cần nạp khối lệnh tiếp theo với độ [trễ thấp](/hpc/cpu-cache/latency),
+- hoặc đang thực thi một khối lệnh độ dài lớn nhưng thời gian xử lý ngắn, và cần [băng thông cao](/hpc/cpu-cache/bandwidth).
 
-- don't know what instructions you are going to execute next, and need to fetch the next block with [low latency](/hpc/cpu-cache/latency),
-- or are executing a long sequence of verbose-but-quick-to-process instructions, and need [high bandwidth](/hpc/cpu-cache/bandwidth).
+Vì thế bộ nhớ hệ thống có thể là nút nghẽn cổ chai cho các chương trình có số lượng mã máy lớn. Hạn chế này làm giảm hiệu quả của các kỹ thuật thảo luận ở trên:
 
-The memory system can therefore become the bottleneck for programs with large machine code. This consideration limits the applicability of the optimization techniques we've previously discussed:
+- [Inlining functions](../functions) không phải lúc nào cũng tối ưu, vì tuy nó làm giảm việc chia sẻ code nhưng lại làm tăng mã chương trình, nên cần nhiều lần tải mã lệnh vào bộ đệm hơn.
 
-- [Inlining functions](../functions) is not always optimal, because it reduces code sharing and increases the binary size, requiring more instruction cache.
-- [Unrolling loops](../loops) is only beneficial up to some extent, even if the number of iterations is known during compile time: at some point, the CPU would have to fetch both instructions and data from the main memory, in which case it will likely be bottlenecked by the memory bandwidth.
-- Huge [code alignments](#code-alignment) increase the binary size, again requiring more instruction cache. Spending one more cycle on fetch is a minor penalty compared to missing the cache and waiting for the instructions to be fetched from the main memory.
+- [Unrolling loops](../loops) chỉ có lợi ở một mức độ nào đó, ngay cả khi số lần lặp được biết trước tại thời gian biên dịch: tại một số điểm, CPU sẽ phải tìm nạp cả lệnh và dữ liệu từ bộ nhớ chính, trong trường hợp đó, nó có thể sẽ bị tắc nghẽn bởi băng thông bộ nhớ.
 
-Another aspect is that placing frequently used instruction sequences on the same [cache lines](/hpc/cpu-cache/cache-lines) and [memory pages](/hpc/cpu-cache/paging) improves [cache locality](/hpc/external-memory/locality). To improve instruction cache utilization, you should  group hot code with hot code and cold code with cold code, and remove dead (unused) code if possible. If you want to explore this idea further, check out Facebook's [Binary Optimization and Layout Tool](https://engineering.fb.com/2018/06/19/data-infrastructure/accelerate-large-scale-applications-with-bolt/), which was recently [merged](https://github.com/llvm/llvm-project/commit/4c106cfdf7cf7eec861ad3983a3dd9a9e8f3a8ae) into LLVM.
+- [Căn chỉnh mã](#code-alignment) lớn làm tăng kích thước mã máy, và đòi hỏi nhiều lần nạp vào bộ đệm chỉ lệnh hơn. Dành thêm một chu kỳ để tìm nạp là một hình phạt nhẹ hơn so với việc bỏ lỡ bộ nhớ đệm và chờ đợi các hướng dẫn được tìm nạp từ bộ nhớ chính.
 
-### Unequal Branches
+Một khía cạnh khác là việc đặt các chuỗi lệnh được sử dụng thường xuyên trên cùng [các dòng bộ nhớ đệm](/hpc/cpu-cache/cache-lines) và các [trang bộ nhớ](/hpc/cpu-cache/paging) sẽ cải thiện [tính địa phưong hóa bộ nhớ đệm](/hpc/external-memory/locality). Để cải thiện việc sử dụng bộ đệm chỉ lệnh, bạn nên nhóm mã nóng với mã nóng và mã nguội với mã lạnh, và xóa mã chết (không sử dụng) nếu có thể. Nếu bạn muốn khám phá thêm ý tưởng này, hãy xem [Công cụ bố trí và tối ưu hóa nhị phân](https://engineering.fb.com/2018/06/19/data-infrastructure/accelerate-large-scale-applications-with-bolt/) của Facebook, công cụ này gần đây đã được hợp nhất vào LLVM.
 
-Suppose that for some reason you need a helper function that calculates the length of an integer interval. It takes two arguments, $x$ and $y$, but for convenience, it may correspond to either $[x, y]$ or $[y, x]$, depending on which one is non-empty. In plain C, you would probably write something like this:
+### Các nhánh không bằng nhau
+
+Giả sử rằng vì lý do nào đó bạn cần một hàm trợ giúp tính độ dài khoảng của hai số nguyên $x$ và $y$. Trong C, bạn sẽ viết như thế này:
 
 ```c++
 int length(int x, int y) {
@@ -70,8 +71,7 @@ int length(int x, int y) {
 }
 ```
 
-In x86 assembly, there is a lot more variability to how you can implement it, noticeably impacting performance. Let's start with trying to map this code directly into assembly:
-
+Trong hợp ngữ x86, có rất nhiều cách triển khai đoạn mã ở trên, mỗi cách triển khai có hiệu năng khác nhau. Hãy bắt đầu bằng cách triển khai trực tiếp đoạn mã trên vào hợp ngữ:
 ```nasm
 length:
     cmp  edi, esi
@@ -87,11 +87,9 @@ less:
     mov  eax, esi
     jmp  done
 ```
+Trong khi mã nguồn C trông có vẻ đối xứng, phiên bản hợp ngữ lại không như vậy. Kết quả là 1 nhánh sẽ chạy nhanh hơn nhánh còn lại một chút: nếu `x > y` CPU sẽ thực hiện 5 lệnh từ cmp tới ret. Trường hợp còn lại CPU thực hiện nhiều hơn 2 lệnh `jump`.
 
-While the initial C code seems very symmetrical, the assembly version isn't. This results in an interesting quirk that one branch can be executed slightly faster than the other: if `x > y`, then the CPU can just execute the 5 instructions between `cmp` and `ret`, which, if the function is aligned, are all going to be fetched in one go; while in case of `x <= y`, two more jumps are required.
-
-It may be reasonable to assume that the `x > y` case is *unlikely* (why would anyone calculate the length of an inverted interval?), more like an exception that mostly never happens. We can detect this case, and simply swap `x` and `y`:
-
+Có thể giả sử rằng hầu hết các trường hợp `x > y` vì ai lại đi tính khoảng cách ngược như vậy. Khi gặp trường hợp ngược, chỉ cần đảo `x` cho `y`:
 ```c++
 int length(int x, int y) {
     if (x > y)
@@ -100,12 +98,12 @@ int length(int x, int y) {
 }
 ```
 
-The assembly would go like this, as it typically does for the if-without-else patterns:
+Mã hợp ngữ sẽ như thế này:
 
 ```nasm
 length:
     cmp  edi, esi
-    jle  normal     ; if x <= y, no swap is needed, and we can skip the xchg
+    jle  normal     ; if x <= y, ko cần đổi chỗ, ta bỏ qua lệnh xchg
     xchg edi, esi
 normal:
     sub  esi, edi
@@ -113,8 +111,8 @@ normal:
     ret
 ```
 
-The total instruction length is 6 now, down from 8. But it is still not quite optimized for our assumed case: if we think that `x > y` never happens, then we are wasteful when loading the `xchg edi, esi` instruction that is never going to be executed. We can solve this by moving it outside the normal execution path:
-
+Tổng số lệnh giảm từ 8 xuống 6. Chưa hẳn đã tối ưu nhất vì trong trường hợp này `x > y` hầu như không xảy ra nên ta sẽ lãng phí 1 lệnh `xchg edi, esi` vì nó hầu như không được thực hiện. Ta sẽ mang nó ra khỏi dòng thực thi bằng cách:
+ 
 ```nasm
 length:
     cmp  edi, esi
@@ -128,8 +126,7 @@ swap:
     jmp normal
 ```
 
-This technique is quite handy when handling exceptions cases in general, and in high-level code, you can give the compiler a [hint](/hpc/compilation/situational) that a certain branch is more likely than the other:
-
+Kỹ thuật này khá tiện lợi trong trường hợp cần xử lý ngoại lệ, và trong ngôn ngữ bậc cao bạn có thể đưa cho trình biên dịch [gợi ý](/hpc/compilation/situational) rằng nhánh nào sẽ dùng nhiều hơn các nhánh còn lại:
 ```c++
 int length(int x, int y) {
     if (x > y) [[unlikely]]
@@ -137,9 +134,7 @@ int length(int x, int y) {
     return y - x;
 }
 ```
-
-This optimization is only beneficial when you know that a branch is very rarely taken. When this is not the case, there are [other aspects](/hpc/pipelining/hazards) more important than the code layout, that compel compilers to avoid any branching at all — in this case by replacing it with a special "conditional move" instruction, roughly corresponding to the ternary expression `(x > y ? y - x : x - y)` or calling `abs(x - y)`:
-
+Quá trình tối ưu trên chỉ có ích lợi khi bạn biết rõ nhành nào thường xuyên dùng, nhánh nào không. Nếu không biết rõ, một số [khía cạnh khác](/hpc/pipelining/hazards) còn quan trọng hơn cách bố trí mã lệnh. Trình biên dịch buộc phải sử dụng một lệnh "di chuyển có điều kiện" gần như tương đương với biểu thức `(x > y ? y - x : x - y)` hoặc gọi `abs(x - y)`:
 ```nasm
 length:
     mov   edx, edi
@@ -151,35 +146,4 @@ length:
     ret
 ```
 
-Eliminating branches is an important topic, and we will spend [much of the next chapter](/hpc/pipelining/branching) discussing it in more detail.
-
-<!--
-
-This architecture peculiarity
-
-When you have branches in your code, there is a variability in how you can place their instruction sequences in the memory — and surprisingly, .
-
-```nasm
-length:
-    mov   edx, edi
-    mov   eax, esi
-    sub   edx, esi
-    sub   eax, edi
-    cmp   edi, esi
-    cmovg eax, edx  ; "mov if edi > esi"
-    ret
-```
-
-Granted that `x > y` never or almost never happens, the branchy variant will be 2 instructions shorter.
-
-https://godbolt.org/z/bb3a3ahdE
-
-(The compiler can't optimize it because it's technically [not allowed to](/hpc/compilation/contracts): despite `y - x` being valid, `x - y` could over/underflow, causing undefined behavior. Although fully correct, I guess the compiler just doesn't date executing it.)
-
-We will spend [much of the next chapter](/hpc/pipelining/branching) discussing it in more detail.
-
-You don't have to decode the things you are not going to execute anyway.
-
-In general, you want to, and put rarely executed code away — even in the case of if-without-else patterns.
-
--->
+Loại bỏ rẽ nhánh là một chủ đề quan trọng và ta sẽ dành [gần như một chương](/hpc/pipelining/branching) để nói về nó.
