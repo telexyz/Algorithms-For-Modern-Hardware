@@ -5,25 +5,14 @@ weight: 3
 
 Khi lập trình viên nghe từ *song song*, họ nghĩ ngay tới *song song đa nhân*, phân công tính toán thành *những luồng* bán độ lập, chúng hoạt động cùng nhau để xử lý một vấn đề cụ thể.
 
-Kiểu song song này chủ yếu để giảm *độ trễ* và đạt được *khả năng mở rộng* chứ không phải làm tăng tính *hiệu quả*. Bạn có thể giải quyết bài toán lớn gấp 10 lần bằng thuật toán song song, nhưng nó cũng sẽ tốn 10 lần tài nguyên tính toán. Mặc dầu phần cứng song song ngày càng trở nên [dồi dào](/hpc/complexity/hardware) và thuật toán song song trở nên ngày càng quan trọng, chúng ta sẽ  chỉ nói về nhân đơn của CPU mà thôi. Có một kiểu song song, đã có sẵn trong nhân đơn CPU, mà bạn có thể dùng miễn phí.
+Kiểu song song này chủ yếu để giảm *độ trễ* và đạt được *khả năng mở rộng* chứ không phải làm tăng tính *hiệu quả*. Bạn có thể giải quyết bài toán lớn gấp 10 lần bằng thuật toán song song, nhưng nó cũng sẽ tốn 10 lần tài nguyên tính toán. Mặc dầu phần cứng song song ngày càng trở nên [dồi dào](/hpc/complexity/hardware) và thuật toán song song trở nên ngày càng quan trọng, chúng ta sẽ chỉ nói về nhân đơn của CPU mà thôi. Có một kiểu song song, đã có sẵn trong nhân đơn CPU, mà bạn có thể dùng miễn phí.
 
-Note: khi nói về hiệu năng, người ta hay nói tới `băng thông` và `độ trễ`
+Phần cứng song song bây giờ ở khắp mọi nơi. Khi bạn mở trang web này trong trình duyệt, nó được tải về từ máy chủ CPU 50 lõi, sau đó được phân tích cú pháp bởi CPU máy tính để bàn 8 lõi và sau đó được hiển thị bằng GPU 400 lõi. Không phải lúc nào tất cả các lõi đều liên quan đến việc tải trang web - chúng có thể đang làm những việc khác. Song song hóa giúp giảm *độ trễ*. Điều quan trọng là vậy, nhưng hiện tại, mối quan tâm chính của chúng tôi không phải là *khả năng mở rộng*, mà là *hiệu quả* của các thuật toán.
 
-<!--
+Chia sẻ các phép tính tự nó là một nghệ thuật, nhưng hiện tại, chúng tôi muốn học cách sử dụng các tài nguyên mà chúng tôi đã có một cách hiệu quả hơn.
 
-This technique only applies 
+Trong khi song song đa lõi giống như đang "ăn gian", nhiều dạng song song tồn tại "miễn phí". Các thuật toán thích ứng cho phần cứng song song rất quan trọng để đạt được *khả năng mở rộng*. Trong phần đầu của cuốn sách này, chúng ta sẽ coi kỹ thuật này là "ăn gian". Chúng tôi chỉ thực hiện các tối ưu hóa thực sự miễn phí và tốt nhất là không lấy đi tài nguyên từ các tiến trình khác có thể đang chạy đồng thời.
 
-Parallel hardware is now everywhere. When you opened this page in your browser, it was retrieved by a 50-core server CPU, then parsed by an 8-core desktop CPU, and then rendered by a 400-core GPU. Not all cores were involved with serving you this page at all times — they might have been doing something else.
-
-Parallelism helps in reducing *latency*. It is important, but for now, our main concern is not *scalability*, but *efficiency* of algorithms.
-
-Sharing computations is an art in itself, but for now, we want to learn how to use resources that we already have more efficiently.
-
-While multi-core parallelism is "cheating," many form of parallelism exist "for free."
-
-Adapting algorithms for parallel hardware is important for achieving *scalability*. In the first part of this book, we will consider this technique "cheating." We only do optimizations that are truly free, and preferably don't take away resources from other processes that might be running concurrently.
-
--->
 
 ### Đường ống chỉ lệnh
 
@@ -46,29 +35,27 @@ Bạn chỉ có thể tận dụng được thế mạnh của siêu vô hướn
 
 Cách thức hoạt động của ooo là một chủ đề [thảo luận nâng cao hơn](/scheduling), hiện tại, bạn có thể giả định rằng CPU duy trì một bộ đệm các lệnh đang chờ xử lý xử lý và thực thi chúng ngay sau khi các giá trị toán hạng của nó được tính toán và có một đơn vị thực thi đang rảnh rỗi.
 
-### An Education Analogy
+### So sánh tương tự với hệ thống giáo dục
 
-Consider how our education system works:
+Hãy xem xét cách thức hoạt động của hệ thống giáo dục:
 
-1. Topics are taught to groups of students instead of individuals as broadcasting the same things to everyone at once is more efficient.
-2. An intake of students is split into groups led by different teachers; assignments and other course materials are shared between groups.
-3. Each year the same course is taught to a new intake so that the teachers are kept busy.
+1. Các chủ đề được dạy cho các nhóm học sinh thay vì các cá nhân vì việc truyền phát những nội dung giống nhau cho mọi người cùng một lúc sẽ hiệu quả hơn.
+2. Một lượng học sinh được chia thành các nhóm do các giáo viên khác nhau phụ trách; bài tập và các tài liệu khóa học được chia sẻ giữa các nhóm.
+3. Mỗi năm cùng một khóa học được giảng dạy cho sinh viên mới nhập học mới để các giáo viên luôn bận rộn.
 
-These innovations greatly increase the *throughput* of the whole system, although the *latency* (time to graduation for a particular student) remains unchanged (and maybe increases a little bit because personalized tutoring is more effective).
+Những đổi mới này làm tăng đáng kể *thông lượng* của toàn hệ thống, mặc dù *độ trễ* (thời gian tốt nghiệp của một sinh viên) vẫn không thay đổi (và có thể tăng một chút vì dạy kèm được cá nhân hóa hiệu quả hơn).
 
-You can find many analogies with modern CPUs:
+Bạn có thể tìm thấy nhiều điểm tương đồng của hệ thống giáo dục với với các CPU hiện đại:
 
-1. CPUs use [SIMD parallelism](/hpc/simd) to execute the same operation on a block of different data points (comprised of 16, 32, or 64 bytes).
-2. There are multiple execution units that can process these instructions simultaneously while sharing other CPU facilities (usually 2-4 execution units).
-3. Instructions are processed in pipelined fashion (saving roughly the same number of cycles as the number of years between kindergarten and PhD).
+1. CPU sử dụng [SIMD] (/hpc/simd) để thực hiện cùng một hoạt động trên một khối các điểm dữ liệu khác nhau (bao gồm 16, 32 hoặc 64 byte).
+2. Có nhiều đơn vị thực thi có thể xử lý các lệnh này đồng thời trong khi chia sẻ các tiện ích CPU khác (thường là 2-4 đơn vị thực thi).
+3. Các chỉ lệnh được xử lý theo kiểu đường ống (tiết kiệm số chu kỳ kiểu như bằng số năm học từ mẫu giáo lên tiến sĩ).
 
-<!-- You can continue "up:" there are multiple school branches (cores), multiple schools (computers), etc. -->
+Ngoài ra, một số khía cạnh khác cần lưu ý:
 
-In addition to that, several other aspects also match:
+- Các đường dẫn thực thi trở nên khác nhau theo thời gian và cần các đơn vị thực thi khác nhau.
+- Một số chỉ lệnh có thể bị dừng vì nhiều lý do khác nhau.
+- Một số chỉ lệnh thậm chí còn được suy đoán (thực hiện trước thời hạn), nhưng sau đó bị loại bỏ.
+- Một số chỉ lệnh có thể được chia thành một số hoạt động vi mô riêng biệt có thể tự tiến hành.
 
-- Execution paths become more divergent with time and need different execution units.
-- Some instructions may be stalled for various reasons.
-- Some instructions are even speculated (executed ahead of time), but then discarded.
-- Some instructions may be split in several distinct micro-operations that can proceed on their own.
-
-Programming pipelined and superscalar processors presents its own challenges, which we are going to address in this chapter.
+Lập trình các bộ xử lý pipelined và superscalar có những thách thức riêng của nó, mà chúng ta sẽ giải quyết trong chương này.
