@@ -30,18 +30,18 @@ Máy tính liên tục trở nên nhanh hơn và dần dần, mọi người ng�
 
 ![](img/complexity.jpg)
 
+Chúng ta sử dụng độ phức tạp tiệm cận vì nó cung cấp sự đơn giản trong khi vẫn đủ chính xác tương đối hữu ích về hiệu suất thuật toán trên các tập dữ liệu lớn. Với lời hứa rằng máy tính cuối cùng sẽ trở nên đủ nhanh để xử lý bất kỳ đầu vào đủ lớn nào trong một khoảng thời gian hợp lý, các thuật toán có độ phức tạp tiệm cận nhanh hơn sẽ luôn nhanh hơn trong thời gian thực. Nhưng lời hứa này hoá ra không đúng - ít nhất là về tốc độ đồng hồ và độ trễ của lệnh - và trong chương này, chúng ta sẽ giải thích lý do tại sao và làm thế nào để xử lý nó.
 
-Chúng ta sử dụng độ phức tạp tiệm cận vì nó cung cấp sự đơn giản trong khi vẫn đủ chính xác tương đối hữu ích về hiệu suất thuật toán trên các tập dữ liệu lớn. Với lời hứa rằng máy tính cuối cùng sẽ trở nên đủ nhanh để xử lý bất kỳ đầu vào đủ lớn nào trong một khoảng thời gian hợp lý, các thuật toán có độ phức tạp tiệm cận nhanh hơn sẽ luôn nhanh hơn trong thời gian thực.
+- - -
 
-Nhưng lời hứa này hoá ra không đúng - ít nhất là về tốc độ đồng hồ và độ trễ của lệnh - và trong chương này, chúng ta sẽ giải thích lý do tại sao và làm thế nào để xử lý nó.
+Trích từ https://programming.guide/big-o-notation-explained.html
 
-Note: https://programming.guide/big-o-notation-explained.html
 1. Θ(1)
 2. Θ(log n)
 3. Θ(n)
 4. Θ(n log n)
-5. Θ(n^k), where k ≥ 2
-6. Θ(k^n), where k ≥ 2
+5. Θ(n^k), với k ≥ 2
+6. Θ(k^n), với k ≥ 2
 7. Θ(n!)
 
-Khi phân tích thuật toán bạn thường gặp phải 1 trong bảy độ phức tạp ở trên. 1-4 là những thuật toán xuất sắc. `Θ(n log n)` là (thuật toán) rất tốt, vì nó gần như tiệm cận với tăng trưởng tuyến tính. 3 độ phức tạp cuối nghĩa là bạn đang gặp rắc rối. Ω(n2) rất tệ, nó chỉ hợp cho lượng dữ liệu nhỏ.
+Khi phân tích thuật toán bạn thường gặp phải 1 trong bảy độ phức tạp ở trên. 1-4 là những thuật toán xuất sắc. `Θ(n log n)` là (thuật toán) rất tốt, vì nó gần như tiệm cận với tăng trưởng tuyến tính. 3 độ phức tạp cuối nghĩa là bạn đang gặp rắc rối. `Ω(n^2)` rất tệ, nó chỉ hợp cho lượng dữ liệu nhỏ kích thước khoảng vài ngàn.
