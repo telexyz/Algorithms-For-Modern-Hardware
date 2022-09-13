@@ -1,25 +1,27 @@
 ---
-title: Pipeline Hazards
+title: Các nguy cơ của đường ống
 weight: 1
 published: true
 ---
 
-[Pipelining](../) lets you hide the latencies of instructions by running them concurrently, but also creates some potential obstacles of its own — characteristically called *pipeline hazards*, that is, situations when the next instruction cannot execute on the following clock cycle.
+[Đường ống](../) cho phép bạn ẩn độ trễ của các lệnh bằng cách chạy chúng đồng thời, nhưng cũng tạo ra một số trở ngại tiềm ẩn - đặc trưng được gọi là *các nguy cơ của đường ống*, tức là các tình huống khi lệnh tiếp theo không thể thực thi trong chu kỳ đồng hồ sau.
 
-There are multiple ways this may happen:
+Có nhiều cách điều này có thể xảy ra:
 
-* A *structural hazard* happens when two or more instructions need the same part of CPU (e.g., an execution unit).
-* A *data hazard* happens when you have to wait for an operand to be computed from some previous step.
-* A *control hazard* happens when a CPU can't tell which instructions it needs to execute next.
+* Một *nguy cơ cấu trúc* xảy ra khi hai hoặc nhiều lệnh cần dùng cùng một phần của CPU (ví dụ: một đơn vị thực thi).
+* Một *nguy cơ dữ liệu* xảy ra khi bạn phải đợi một toán hạng được tính toán từ một số bước trước đó.
+* Một *nguy cơ điều khiển* xảy ra khi một CPU không thể biết nó cần thực hiện lệnh nào tiếp theo.
 
-The only way to resolve a hazard is to have a *pipeline stall*: stop the progress of all previous steps until the cause of congestion is gone. This creates *bubbles* in the pipeline — analogous with air bubbles in fluid pipes — a time-propagating condition when execution units are idling and no useful work is done.
+Cách duy nhất để xử lý các nguy cơ đó là *dừng đường ống*: dừng tất cả các tiến trình cho tới khi nguyên nhân gây ra sự tắc nghẽn biến mất. Điều này tạo ra những *bong bóng* trong đường ống, khi mà các đơn vị thực thi không làm việc và không có việc hữu ích nào được hoàn thành.
 
-![Pipeline stall on the execution stage](../img/bubble.png)
+![Sự tắc nghẽn đường ống ở giai đoạn thực thi lệnh](../img/bubble.png)
 
-Different hazards have different penalties:
+Các mối nguy cơ khác nhau có các hình phạt khác nhau:
 
-- In structural hazards, you have to wait (usually one more cycle) until the execution unit is ready. They are fundamental bottlenecks on performance and can't be avoided — you have to engineer around them.
-- In data hazards, you have to wait for the required data to be computed (the latency of the *critical path*). Data hazards are solved by restructuring computations so that the critical path is shorter.
-- In control hazards, you generally have to flush the entire pipeline and start over, wasting a whole 15-20 cycles. They are solved by either removing branches completely, or making them predictable so that the CPU can effectively *speculate* on what is going to be executed next.
+- Trong các mối nguy cơ về cấu trúc, bạn phải đợi (thường là một chu kỳ nữa) cho đến khi đơn vị thực thi sẵn sàng. Chúng là những nút thắt cơ bản về hiệu suất và không thể tránh khỏi.
 
-As they have very different impacts on performance, we are going to go in the reversed order and start with the more grave ones.
+- Trong các mối nguy cơ về dữ liệu, bạn phải đợi dữ liệu cần thiết được tính toán (độ trễ của *đường dẫn tới hạn*). Các mối nguy dữ liệu được giải quyết bằng cách cơ cấu lại các tính toán để đường dẫn tới hạn ngắn hơn.
+
+- Trong các mối nguy cơ kiểm soát, bạn thường phải xả toàn bộ đường ống và bắt đầu lại, lãng phí toàn bộ 15-20 chu kỳ. Chúng được giải quyết bằng cách loại bỏ hoàn toàn các nhánh hoặc làm cho chúng có thể dự đoán được để CPU có thể *suy đoán* một cách hiệu quả về những gì sẽ được thực thi tiếp theo.
+
+Vì chúng có tác động rất khác nhau đến hiệu suất, chúng ta sẽ xem xét theo thứ tự giảm dần, bắt đàu từ những thứ nghiêm trọng nhất.
