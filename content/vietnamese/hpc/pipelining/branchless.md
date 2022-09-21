@@ -80,21 +80,19 @@ loop:
     jnz     loop                                ; "iterate while rdx is not zero"
 ```
 
-This general technique is called *predication*, and it is roughly equivalent to this algebraic trick:
-
+Kỹ thuật này được gọi là *dự đoán*, và nó gần như tương đương với thủ thuật đại số:
 $$
 x = c \cdot a + (1 - c) \cdot b
 $$
 
-This way you can eliminate branching, but this comes at the cost of evaluating *both* branches and the `cmov` itself. Because evaluating the ">=" branch costs nothing, the performance is exactly equal to [the "always yes" case](../branching/#branch-prediction) in the branchy version.
 
-### When Predication Is Beneficial
+Bằng cách này, bạn có thể loại bỏ sự phân nhánh, nhưng điều này phải trả giá bằng việc đánh giá *cả* hai nhánh và lệnh `cmov`. Bởi vì việc đánh giá nhánh ">=" không tốn chi phí nào, nên hiệu suất chính xác bằng [trường hợp "luôn có"](../branching/#branch-prediction) trong phiên bản rẽ nhánh.
 
-Using predication eliminates [a control hazard](../hazards) but introduces a data hazard. There is still a pipeline stall, but it is a cheaper one: you only need to wait for `cmov` to be resolved and not flush the entire pipeline in case of a mispredict.
+### Khi dự đoán có lợi
 
-However, there are many situations when it is more efficient to leave branchy code as it is. This is the case when the cost of computing *both* branches instead of just *one* outweighs the penalty for the potential branch mispredictions.
+Sử dụng dự đoán loại bỏ một [mối nguy điều khiển](../hazards) nhưng lại tạo ra một mối nguy dữ liệu. Vẫn gây ra tắc nghẽn đường ống nhưng bớt tốn kém hơn: bạn chỉ cần chờ `cmov` mà không phải xả bỏ toàn bộ đường ống như trong như trong trường hợp dự đoán sai.
 
-In our example, the branchy code wins when the branch can be predicted with a probability of more than ~75%.
+Tuy nhiên, có nhiều tình huống, để nguyên mã nhánh sẽ hiệu quả hơn. Đây là trường hợp khi chi phí tính toán *cả hai* nhánh thay vì chỉ *một* lớn hơn chi phí của việc dự đoán sai nhánh. Thường thì mã rẽ nhánh thắng khi nhánh có thể được dự đoán với xác suất lớn hơn `75%`.
 
 ![](../img/branchy-vs-branchless.svg)
 
